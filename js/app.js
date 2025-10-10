@@ -129,7 +129,24 @@ class CalorieTracker {
     this.#displayNewWorkout(workout);
     this.#render();
   }
-
+  removeMeal(id) {
+    const index = this.#meals.findIndex((meal) => meal.id === id);
+    if (index !== -1) {
+      const meal = this.#meals[index];
+      this.#totalCalories -= meal.calories;
+      this.#meals.splice(index, 1);
+      this.#render();
+    }
+  }
+  removeWorkout(id) {
+    const index = this.#workout.findIndex((workout) => workout.id === id);
+    if (index !== -1) {
+      const workout = this.#workout[index];
+      this.#totalCalories += workout.calories;
+      this.#workout.splice(index, 1);
+      this.#render();
+    }
+  }
   show() {
     console.log(this.#calories);
     console.log(this.#totalCalories);
@@ -164,6 +181,13 @@ class App {
     document
       .getElementById("workout-form")
       .addEventListener("submit", this.#newItem.bind(this, "workout"));
+    // Event Delegation
+    document
+      .getElementById("meal-items")
+      .addEventListener("click", this.#removeItem.bind(this, "meal"));
+    document
+      .getElementById("workout-items")
+      .addEventListener("click", this.#removeItem.bind(this, "workout"));
   }
 
   #newItem(type, e) {
@@ -190,6 +214,22 @@ class App {
 
     name.value = "";
     calories.value = "";
+  }
+  #removeItem(type, e) {
+    e.preventDefault();
+    if (
+      e.target.classList.contains("delete") ||
+      e.target.classList.contains("fa-xmark")
+    ) {
+      if (confirm("Are you sure?")) {
+        const id = e.target.closest(".card").getAttribute("data-id");
+        type === "meal"
+          ? this.#tracker.removeMeal(id)
+          : this.#tracker.removeWorkout(id);
+
+        const item = e.target.closest(".card").remove();
+      }
+    }
   }
 }
 
