@@ -248,7 +248,7 @@ class App {
   }
   #filterItem(type, e) {
     const text = e.target.value.toLowerCase();
-    document.querySelectorAll(`${type}-items .card`).forEach((item) => {
+    document.querySelectorAll(`#${type}-items .card`).forEach((item) => {
       const name = item.firstElementChild.firstElementChild.textContent;
       if (name.toLowerCase().indexOf(text) !== -1) {
         item.style.display = "block";
