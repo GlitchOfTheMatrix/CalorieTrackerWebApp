@@ -147,6 +147,12 @@ class CalorieTracker {
       this.#render();
     }
   }
+  reset() {
+    this.#totalCalories = 0;
+    this.#meals = [];
+    this.#workout = [];
+    this.#render();
+  }
   show() {
     console.log(this.#calories);
     console.log(this.#totalCalories);
@@ -188,6 +194,15 @@ class App {
     document
       .getElementById("workout-items")
       .addEventListener("click", this.#removeItem.bind(this, "workout"));
+    document
+      .getElementById("filter-meals")
+      .addEventListener("keyup", this.#filterItem.bind(this, "meal"));
+    document
+      .getElementById("filter-workouts")
+      .addEventListener("keyup", this.#filterItem.bind(this, "workout"));
+    document
+      .getElementById("reset")
+      .addEventListener("click", this.#reset.bind(this));
   }
 
   #newItem(type, e) {
@@ -230,6 +245,24 @@ class App {
         const item = e.target.closest(".card").remove();
       }
     }
+  }
+  #filterItem(type, e) {
+    const text = e.target.value.toLowerCase();
+    document.querySelectorAll(`${type}-items .card`).forEach((item) => {
+      const name = item.firstElementChild.firstElementChild.textContent;
+      if (name.toLowerCase().indexOf(text) !== -1) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+  #reset() {
+    this.#tracker.reset();
+    document.getElementById("meal-items").innerHTML = "";
+    document.getElementById("workout-items").innerHTML = "";
+    document.getElementById("filter-meals").value = "";
+    document.getElementById("filter-workouts").value = "";
   }
 }
 
