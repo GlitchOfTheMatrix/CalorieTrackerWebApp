@@ -10,6 +10,8 @@ class CalorieTracker {
     this.#displayCaloriesBurned();
     this.#displayCaloriesRemaining();
     this.#displayCalorieProgress();
+
+    document.getElementById("limit").value = this.#calories;
   }
 
   //   Private Methods
@@ -159,6 +161,7 @@ class CalorieTracker {
     this.#totalCalories = 0;
     this.#meals = [];
     this.#workout = [];
+    Storage.clearAll();
     this.#render();
   }
   setLimit(calorieLimit) {
@@ -265,6 +268,14 @@ class Storage {
       }
     });
     localStorage.setItem("workout", JSON.stringify(workouts));
+  }
+  static clearAll() {
+    // localStorage.clear(); // Everything goes away
+
+    // However, if you want to keep the calorie limit, then
+    localStorage.removeItem("workout");
+    localStorage.removeItem("meals");
+    localStorage.removeItem("totalCalories");
   }
 }
 
